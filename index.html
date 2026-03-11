@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Apex Infrastructure and Facilities</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --black: #080A0C;
+    --dark: #0F1215;
+    --card: #14181D;
+    --border: #1E2530;
+    --gold: #C8972A;
+    --gold-light: #E8B84B;
+    --white: #F0F2F5;
+    --muted: #6B7685;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 5%; background: rgba(8,10,12,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+  .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+  .logo-mark { width: 36px; height: 36px; background: var(--gold); clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: var(--black); flex-shrink: 0; }
+  .logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 0.08em; color: var(--white); line-height: 1.1; }
+  .logo-sub { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.05em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta { background: var(--gold); color: var(--black); padding: 0.55rem 1.4rem; border-radius: 2px; font-size: 0.8rem; font-weight: 600; text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--gold-light); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--white); }
+
+  #home { min-height: 100vh; display: flex; align-items: center; padding: 8rem 5% 4rem; position: relative; overflow: hidden; }
+  .hero-grid { position: absolute; inset: 0; opacity: 0.04; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-glow { position: absolute; top: -200px; right: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(200,151,42,0.12) 0%, transparent 70%); pointer-events: none; }
+  .hero-accent-line { position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 200px; background: linear-gradient(180deg, transparent, var(--gold), transparent); }
+  .hero-content { position: relative; max-width: 780px; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .hero-tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 9vw, 7.5rem); line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 1.5rem; }
+  .hero-title span { color: var(--gold); }
+  .hero-desc { font-size: 1.05rem; color: var(--muted); line-height: 1.75; max-width: 520px; margin-bottom: 2.5rem; }
+  .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--gold); color: var(--black); padding: 0.9rem 2rem; border-radius: 2px; font-weight: 600; font-size: 0.85rem; text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.2s; }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline { border: 1px solid var(--border); color: var(--white); padding: 0.9rem 2rem; border-radius: 2px; font-size: 0.85rem; text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.2s; }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-stats { display: flex; gap: 3rem; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--gold); line-height: 1; }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.25rem; }
+  .bbbee-badge { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); border: 1px solid var(--gold); padding: 1.5rem 1.8rem; text-align: center; border-radius: 2px; background: rgba(200,151,42,0.05); }
+  .bbbee-badge .bbb-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; }
+  .bbbee-badge .bbb-level { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--white); line-height: 1; }
+  .bbbee-badge .bbb-desc { font-size: 0.7rem; color: var(--muted); margin-top: 0.25rem; }
+  .bbbee-badge .bbb-owned { font-size: 0.75rem; color: var(--gold); font-weight: 500; margin-top: 0.5rem; }
+
+  section { padding: 6rem 5%; }
+  .section-tag { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+  .section-tag::before { content: ''; width: 20px; height: 1px; background: var(--gold); }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1; letter-spacing: 0.02em; margin-bottom: 1rem; }
+  .section-title span { color: var(--gold); }
+  .section-desc { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 540px; }
+
+  #about { background: var(--dark); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 3rem; }
+  .about-visual { position: relative; height: 420px; }
+  .about-box { position: absolute; border: 1px solid var(--border); border-radius: 2px; background: var(--card); }
+  .about-box-main { inset: 0; display: flex; align-items: center; justify-content: center; }
+  .about-box-main .big-a { font-family: 'Bebas Neue', sans-serif; font-size: 10rem; color: rgba(200,151,42,0.08); line-height: 1; user-select: none; }
+  .about-box-float { bottom: -1.5rem; right: -1.5rem; width: 180px; padding: 1.2rem 1.5rem; border-color: var(--gold); background: rgba(200,151,42,0.05); }
+  .about-box-float .f-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--gold); }
+  .about-box-float .f-txt { font-size: 0.75rem; color: var(--muted); }
+  .about-points { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .about-point { display: flex; align-items: flex-start; gap: 1rem; }
+  .point-dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; margin-top: 0.5rem; flex-shrink: 0; }
+  .point-text { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+  .point-text strong { color: var(--white); }
+
+  #services { background: var(--black); }
+  .services-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .service-card { background: var(--dark); padding: 2.5rem 2rem; transition: background 0.3s; position: relative; overflow: hidden; }
+  .service-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+  .service-card:hover { background: var(--card); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--gold); letter-spacing: 0.15em; margin-bottom: 1.5rem; opacity: 0.7; }
+  .service-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .service-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+  .service-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+  .service-tag { display: inline-block; margin-top: 1rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; padding: 0.2rem 0.6rem; border: 1px solid rgba(200,151,42,0.3); border-radius: 1px; }
+
+  #values { background: var(--dark); }
+  .values-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .value-card { padding: 2rem 1.5rem; border: 1px solid var(--border); border-radius: 2px; background: var(--card); transition: border-color 0.3s; }
+  .value-card:hover { border-color: var(--gold); }
+  .value-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+  .value-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+  .value-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  #bbbee { background: var(--black); }
+  .bbbee-content { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 3rem; }
+  .bbbee-card { background: var(--card); border: 1px solid var(--gold); padding: 3rem; position: relative; overflow: hidden; }
+  .bbbee-card::before { content: 'B-BBEE'; position: absolute; right: -1rem; top: -1rem; font-family: 'Bebas Neue', sans-serif; font-size: 6rem; color: rgba(200,151,42,0.04); pointer-events: none; }
+  .bbbee-level-display { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: var(--gold); line-height: 1; }
+  .bbbee-level-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.5rem; }
+  .bbbee-items { margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+  .bbbee-item { display: flex; align-items: center; gap: 1rem; }
+  .bbbee-check { color: var(--gold); font-size: 0.9rem; }
+  .bbbee-item-text { font-size: 0.88rem; color: var(--muted); }
+  .bbbee-item-text strong { color: var(--white); }
+
+  #subcontractors { background: var(--dark); }
+  .sub-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; margin-top: 3rem; }
+  .sub-benefits { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+  .sub-benefit { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .sub-benefit-icon { width: 42px; height: 42px; background: rgba(200,151,42,0.1); border: 1px solid rgba(200,151,42,0.3); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .sub-benefit-title { font-weight: 500; font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .sub-benefit-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+  .sub-form { background: var(--card); border: 1px solid var(--border); padding: 2.5rem; border-radius: 2px; }
+  .form-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .form-subtitle { font-size: 0.82rem; color: var(--muted); margin-bottom: 2rem; }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-label { display: block; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.4rem; font-family: 'DM Mono', monospace; }
+  .form-input, .form-select, .form-textarea { width: 100%; background: var(--dark); border: 1px solid var(--border); color: var(--white); padding: 0.75rem 1rem; font-size: 0.88rem; font-family: 'DM Sans', sans-serif; border-radius: 2px; transition: border-color 0.2s; outline: none; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+  .form-select option { background: var(--dark); }
+  .form-textarea { resize: vertical; min-height: 90px; }
+  .form-submit { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 1rem; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: all 0.2s; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem; }
+  .form-submit:hover { background: var(--gold-light); }
+  .form-note { font-size: 0.72rem; color: var(--muted); text-align: center; margin-top: 0.75rem; }
+
+  #contact { background: var(--black); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; align-items: start; }
+  .contact-items { display: flex; flex-direction: column; gap: 2rem; }
+  .contact-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .contact-icon { width: 44px; height: 44px; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; border-radius: 2px; background: rgba(200,151,42,0.05); }
+  .contact-item-label { font-size: 0.7rem; color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase; font-family: 'DM Mono', monospace; margin-bottom: 0.3rem; }
+  .contact-item-value { font-size: 0.95rem; color: var(--white); }
+  .contact-item-sub { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+  .contact-form { background: var(--card); border: 1px solid var(--border); padding: 2.5rem; border-radius: 2px; }
+
+  footer { background: var(--dark); border-top: 1px solid var(--border); padding: 3rem 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.08em; }
+  .footer-logo span { color: var(--gold); }
+  .footer-text { font-size: 0.78rem; color: var(--muted); }
+  .footer-reg { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; margin-top: 0.3rem; }
+
+  .success-msg { display: none; background: rgba(200,151,42,0.1); border: 1px solid var(--gold); padding: 1rem; border-radius: 2px; text-align: center; font-size: 0.88rem; color: var(--gold); margin-top: 1rem; }
+  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 1024px) { .bbbee-badge { display: none; } .values-grid { grid-template-columns: repeat(2, 1fr); } .services-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } .about-grid, .bbbee-content, .sub-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; } .services-grid { grid-template-columns: 1fr; } .values-grid { grid-template-columns: 1fr 1fr; } .form-row { grid-template-columns: 1fr; } .hero-stats { gap: 1.5rem; } footer { flex-direction: column; text-align: center; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#home" class="nav-logo">
+    <div class="logo-mark">A</div>
+    <div><div class="logo-text">APEX INFRASTRUCTURE</div><div class="logo-sub">and Facilities</div></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#values">Values</a></li>
+    <li><a href="#bbbee">B-BBEE</a></li>
+    <li><a href="#subcontractors">Subcontractors</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get a Quote</a>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+
+<section id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-accent-line"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Registered South African Company</div>
+    <h1 class="hero-title">BUILDING<br/>SOUTH AFRICA'S<br/><span>FUTURE</span></h1>
+    <p class="hero-desc">Apex Infrastructure and Facilities is a proudly South African, 100% black-owned company delivering excellence across facilities management, logistics, and construction.</p>
+    <div class="hero-buttons">
+      <a href="#services" class="btn-primary">Our Services</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">100%</div><div class="stat-label">Black Owned</div></div>
+      <div><div class="stat-num">L1</div><div class="stat-label">B-BBEE Status</div></div>
+      <div><div class="stat-num">CSD</div><div class="stat-label">Registered</div></div>
+      <div><div class="stat-num">CIPC</div><div class="stat-label">Registered</div></div>
+    </div>
+  </div>
+  <div class="bbbee-badge">
+    <div class="bbb-label">B-BBEE Status</div>
+    <div class="bbb-level">L1</div>
+    <div class="bbb-desc">Contributor Level</div>
+    <div class="bbb-owned">100% Black Owned</div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-tag">Who We Are</div>
+  <div class="about-grid">
+    <div>
+      <h2 class="section-title">BUILT TO <span>GROW.</span><br/>BUILT TO LAST.</h2>
+      <p class="section-desc">Apex Infrastructure and Facilities was founded with a clear vision — to build a multi-sector infrastructure company that delivers real value across South Africa. We started lean, we move smart, and we grow with purpose.</p>
+      <div class="about-points">
+        <div class="about-point"><div class="point-dot"></div><div class="point-text"><strong>Registered & Compliant</strong> — CIPC registered, SARS tax compliant, and CSD registered for government procurement.</div></div>
+        <div class="about-point"><div class="point-dot"></div><div class="point-text"><strong>Multi-Sector Vision</strong> — From facilities management today to logistics and construction tomorrow.</div></div>
+        <div class="about-point"><div class="point-dot"></div><div class="point-text"><strong>Director: Pabalelo Jantjie</strong> — Founded and led by a young South African entrepreneur based in Kuruman, Northern Cape.</div></div>
+      </div>
+    </div>
+    <div class="about-visual fade-up">
+      <div class="about-box about-box-main"><div class="big-a">A</div></div>
+      <div class="about-box about-box-float"><div class="f-num">2025</div><div class="f-txt">Year Established</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="services-header">
+    <div><div class="section-tag">What We Do</div><h2 class="section-title">OUR <span>SERVICES</span></h2></div>
+  </div>
+  <div class="services-grid fade-up">
+    <div class="service-card"><div class="service-num">01</div><div class="service-icon">🏢</div><div class="service-name">Facilities Management</div><div class="service-desc">Professional cleaning, maintenance, and management of commercial, government, and residential facilities.</div><span class="service-tag">Active</span></div>
+    <div class="service-card"><div class="service-num">02</div><div class="service-icon">🚛</div><div class="service-name">Logistics & Transport</div><div class="service-desc">Reliable logistics solutions for businesses and government departments across South Africa.</div><span class="service-tag">Coming Soon</span></div>
+    <div class="service-card"><div class="service-num">03</div><div class="service-icon">🏗️</div><div class="service-name">Construction</div><div class="service-desc">Civil and general construction services for infrastructure projects — government and private sector.</div><span class="service-tag">Coming Soon</span></div>
+    <div class="service-card"><div class="service-num">04</div><div class="service-icon">🔧</div><div class="service-name">Property Maintenance</div><div class="service-desc">End-to-end maintenance including repairs, painting, and general upkeep for commercial properties.</div><span class="service-tag">Active</span></div>
+    <div class="service-card"><div class="service-num">05</div><div class="service-icon">👷</div><div class="service-name">Labour Supply</div><div class="service-desc">Vetted, reliable contract workers for short and long-term projects across all sectors.</div><span class="service-tag">Active</span></div>
+    <div class="service-card"><div class="service-num">06</div><div class="service-icon">📋</div><div class="service-name">Tender & Contract Management</div><div class="service-desc">Experienced in government and private sector tender processes — on time and on budget.</div><span class="service-tag">Active</span></div>
+  </div>
+</section>
+
+<section id="values">
+  <div class="section-tag">Why Choose Us</div>
+  <h2 class="section-title">OUR <span>VALUES</span></h2>
+  <p class="section-desc">The principles that drive every decision we make at Apex.</p>
+  <div class="values-grid fade-up">
+    <div class="value-card"><div class="value-icon">⚡</div><div class="value-name">Reliability</div><div class="value-desc">We deliver what we promise, when we promise it. Our clients know they can count on Apex.</div></div>
+    <div class="value-card"><div class="value-icon">🎯</div><div class="value-name">Excellence</div><div class="value-desc">We hold ourselves to a high standard on every job — big or small. Quality is non-negotiable.</div></div>
+    <div class="value-card"><div class="value-icon">🤝</div><div class="value-name">Integrity</div><div class="value-desc">Honest pricing, transparent agreements, and fair treatment of everyone we work with.</div></div>
+    <div class="value-card"><div class="value-icon">🌍</div><div class="value-name">Transformation</div><div class="value-desc">As a 100% black-owned business, we are committed to economic transformation and local opportunities.</div></div>
+  </div>
+</section>
+
+<section id="bbbee">
+  <div class="section-tag">Transformation</div>
+  <div class="bbbee-content">
+    <div>
+      <h2 class="section-title">PROUDLY <span>B-BBEE</span> COMPLIANT</h2>
+      <p class="section-desc">Apex Infrastructure and Facilities is a 100% black-owned South African company, giving clients maximum B-BBEE procurement recognition points.</p>
+      <div class="bbbee-items fade-up">
+        <div class="bbbee-item"><span class="bbbee-check">✦</span><div class="bbbee-item-text"><strong>100% Black Owned</strong> — Maximum ownership points for procurement scoring</div></div>
+        <div class="bbbee-item"><span class="bbbee-check">✦</span><div class="bbbee-item-text"><strong>EME Status</strong> — Exempted Micro Enterprise with full B-BBEE recognition</div></div>
+        <div class="bbbee-item"><span class="bbbee-check">✦</span><div class="bbbee-item-text"><strong>Government Procurement Ready</strong> — CSD registered, tax compliant, tender-ready</div></div>
+        <div class="bbbee-item"><span class="bbbee-check">✦</span><div class="bbbee-item-text"><strong>Supporting Transformation</strong> — We actively subcontract to other black-owned businesses</div></div>
+      </div>
+    </div>
+    <div class="bbbee-card fade-up">
+      <div class="bbbee-level-display">LEVEL 1</div>
+      <div class="bbbee-level-label">B-BBEE Contributor Status</div>
+      <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+        <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;">Procurement Recognition</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--gold);">135%</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:0.25rem;">Recognition level for clients who procure from Apex</div>
+      </div>
+      <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+        <div style="font-size:0.78rem;color:var(--muted);">Ownership Structure</div>
+        <div style="font-size:0.92rem;color:var(--white);margin-top:0.3rem;">100% Black Owned — South African</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="subcontractors">
+  <div class="section-tag">Work With Us</div>
+  <div class="sub-grid">
+    <div>
+      <h2 class="section-title">JOIN OUR <span>NETWORK</span></h2>
+      <p class="section-desc">We are building a database of reliable subcontractors across all sectors. Register and we'll contact you when opportunities arise.</p>
+      <div class="sub-benefits">
+        <div class="sub-benefit"><div class="sub-benefit-icon">📄</div><div><div class="sub-benefit-title">Clear Written Agreements</div><div class="sub-benefit-desc">Every engagement comes with a formal signed contract. Everything is documented.</div></div></div>
+        <div class="sub-benefit"><div class="sub-benefit-icon">💳</div><div><div class="sub-benefit-title">Payment on Invoice</div><div class="sub-benefit-desc">Submit your invoice and get paid within agreed terms. No chasing. No delays.</div></div></div>
+        <div class="sub-benefit"><div class="sub-benefit-icon">📈</div><div><div class="sub-benefit-title">Long-Term Partnership</div><div class="sub-benefit-desc">As Apex grows into construction and logistics, our network grows with us.</div></div></div>
+        <div class="sub-benefit"><div class="sub-benefit-icon">🇿🇦</div><div><div class="sub-benefit-title">Supporting Local Business</div><div class="sub-benefit-desc">We prioritise black-owned subcontractors and SMMEs.</div></div></div>
+      </div>
+    </div>
+    <div class="sub-form fade-up">
+      <div class="form-title">REGISTER AS A SUBCONTRACTOR</div>
+      <div class="form-subtitle">Fill in below and we will be in touch.</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" type="text" placeholder="Your full name" id="sub-name"/></div>
+        <div class="form-group"><label class="form-label">Company Name (if any)</label><input class="form-input" type="text" placeholder="Company name"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" type="tel" placeholder="07X XXX XXXX"/></div>
+        <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="your@email.com"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">ID / Company Reg. Number</label><input class="form-input" type="text" placeholder="ID or CIPC registration number"/></div>
+      <div class="form-group"><label class="form-label">SARS Tax Reference Number</label><input class="form-input" type="text" placeholder="Your SARS tax number"/></div>
+      <div class="form-group">
+        <label class="form-label">Services / Trade</label>
+        <select class="form-select">
+          <option value="" disabled selected>Select your primary service</option>
+          <option>Cleaning & Hygiene Services</option>
+          <option>General Construction & Building</option>
+          <option>Plumbing</option><option>Electrical</option>
+          <option>Painting & Finishing</option>
+          <option>Transport & Logistics</option>
+          <option>Landscaping & Garden Services</option>
+          <option>Security Services</option>
+          <option>Waste Removal</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Areas / Provinces You Cover</label><input class="form-input" type="text" placeholder="e.g. Northern Cape, Gauteng"/></div>
+      <div class="form-group"><label class="form-label">Additional Information</label><textarea class="form-textarea" placeholder="Experience, team size, equipment, etc."></textarea></div>
+      <button class="form-submit" onclick="submitSubForm()">SUBMIT APPLICATION</button>
+      <div class="form-note">Your information is kept strictly confidential.</div>
+      <div class="success-msg" id="sub-success">✦ Application received! We will be in touch soon.</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-tag">Get In Touch</div>
+  <div class="contact-grid">
+    <div>
+      <h2 class="section-title">LET'S <span>WORK</span><br/>TOGETHER</h2>
+      <p class="section-desc" style="margin-bottom:2.5rem;">Whether you need a quote, want to discuss a tender, or just want to learn more — reach out directly.</p>
+      <div class="contact-items">
+        <div class="contact-item"><div class="contact-icon">📱</div><div><div class="contact-item-label">WhatsApp / Phone</div><div class="contact-item-value">069 281 5900</div><div class="contact-item-sub">Pabalelo Jantjie — Director</div></div></div>
+        <div class="contact-item"><div class="contact-icon">📧</div><div><div class="contact-item-label">Email</div><div class="contact-item-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="365f585059765746534e5f585057555f5a5f425f5345185559184c57">[email&#160;protected]</a></div><div class="contact-item-sub">We respond within 24 hours</div></div></div>
+        <div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-item-label">Address</div><div class="contact-item-value">1305 Bankhara Bodulong</div><div class="contact-item-sub">Kuruman, Northern Cape, 8460</div></div></div>
+        <div class="contact-item"><div class="contact-icon">🕐</div><div><div class="contact-item-label">Business Hours</div><div class="contact-item-value">Mon – Fri, 08:00 – 17:00</div><div class="contact-item-sub">Saturday by appointment</div></div></div>
+      </div>
+    </div>
+    <div class="contact-form fade-up">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;margin-bottom:0.5rem;">SEND US A MESSAGE</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;">We respond within 24 hours.</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" type="text" placeholder="Full name"/></div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" type="tel" placeholder="07X XXX XXXX"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="your@email.com"/></div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <select class="form-select">
+          <option value="" disabled selected>What is this about?</option>
+          <option>Request a Quote</option><option>Tender Enquiry</option>
+          <option>General Enquiry</option><option>Subcontractor Enquiry</option>
+          <option>Partnership Opportunity</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Tell us about your project or enquiry..." style="min-height:120px;"></textarea></div>
+      <button class="form-submit" onclick="submitContact()">SEND MESSAGE</button>
+      <div class="success-msg" id="contact-success">✦ Message sent! We will get back to you within 24 hours.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-logo">APEX <span>INFRASTRUCTURE</span> AND FACILITIES</div>
+    <div class="footer-reg">CIPC Registered · SARS Compliant · CSD Registered · B-BBEE Level 1 · 100% Black Owned · Kuruman, Northern Cape</div>
+  </div>
+  <div class="footer-text">© 2025 Apex Infrastructure and Facilities. All rights reserved.</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.05, rootMargin: "0px 0px -50px 0px" });
+  document.querySelectorAll(".fade-up").forEach(el => observer.observe(el));
+  setTimeout(() => { document.querySelectorAll(".fade-up").forEach(el => el.classList.add("visible")); }, 1200);
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.borderBottomColor = window.scrollY > 50 ? 'rgba(200,151,42,0.2)' : 'var(--border)';
+  });
+
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    const cta = document.querySelector('.nav-cta');
+    const open = links.style.display === 'flex';
+    links.style.cssText = open ? '' : 'display:flex;flex-direction:column;position:fixed;top:65px;left:0;right:0;background:var(--dark);padding:2rem 5%;gap:1.5rem;border-bottom:1px solid var(--border);z-index:99;';
+    if (cta) cta.style.display = open ? '' : 'none';
+  }
+
+  function submitSubForm() {
+    if (!document.getElementById('sub-name').value) { alert('Please fill in your name.'); return; }
+    document.getElementById('sub-success').style.display = 'block';
+    setTimeout(() => document.getElementById('sub-success').style.display = 'none', 
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/27692815900?text=Hi%2C%20I%20found%20Apex%20Infrastructure%20online%20and%20I%27d%20like%20to%20enquire%20about%20your%20services" 
+     target="_blank" 
+     style="position:fixed;bottom:28px;right:28px;z-index:9999;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;"
+     onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(37,211,102,0.6)'"
+     onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.4)'"
+     title="Chat on WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+  </a>
